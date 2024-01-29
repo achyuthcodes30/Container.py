@@ -1,0 +1,24 @@
+version: "3.9"
+
+services:
+ mongodb:
+  container_name: mongo_container
+  image: mongo:6
+  restart: always
+  volumes:
+   - mongodb_data:/data/db
+
+ backend:
+  container_name: node_container
+  build: ./backend
+  ports:
+   - 4000:3000
+  environment:
+   PORT: 3000
+   WHICH_DB: mongodb://mongodb:27017/composexample
+  depends_on:
+   - mongodb
+  
+
+volumes:
+ mongodb_data: {}
