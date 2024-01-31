@@ -1,0 +1,26 @@
+.layout {
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+}
+.title {
+  font-family: "Lucida Sans", "Lucida Sans Regular", sans-serif;
+  font-size: 3.5rem;
+  font-weight: 800;
+  color: white;
+  overflow: hidden;
+  margin: 0.5rem auto;
+}
+
+.box {
+  background-color: rgb(168, 233, 246, 0.2);
+  height: 80%;
+  width: 80%;
+  border-radius: 2%;
+  margin: 1rem auto;
+  box-shadow:
+    rgba(43, 63, 135, 0.25) 0px 50px 100px -20px,
+    rgba(1, 33, 49, 0.3) 0px 30px 60px -30px;
+}

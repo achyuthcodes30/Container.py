@@ -1,0 +1,7 @@
+* {
+  overflow: hidden;
+}
+
+body {
+  background: radial-gradient(at left top, #3775d1, #49bbde);
+}

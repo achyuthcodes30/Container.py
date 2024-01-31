@@ -1,4 +1,4 @@
-import {createTask,getAllTasks,getPendingTasks,getCompletedTasks,setTaskAsCompleted} from "../controllers/taskcontrollers.js"
+import {createTask,getAllTasks,getPendingTasks,getCompletedTasks,setTaskAsCompleted,deleteTask} from "../controllers/taskcontrollers.js"
 import express from "express"
 
 const router = express.Router()
@@ -12,8 +12,10 @@ router.route("/pending")
 
 router.route("/completed")
       .get(getCompletedTasks)
+router.route("/:id")
+      .put(setTaskAsCompleted)
+router.route("/:id/delete")
+      .delete(deleteTask)
 
-router.route("/setascompleted")
-      .post(setTaskAsCompleted)
 const taskroutes = router
 export default taskroutes

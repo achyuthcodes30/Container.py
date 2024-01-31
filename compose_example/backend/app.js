@@ -1,39 +1,38 @@
-import dotenv from "dotenv"  // To pass and use environment variables from compose file.
-dotenv.config()
-
+import dotenv from "dotenv"; // To pass and use environment variables from compose file.
+dotenv.config();
 
 //Imports
-import mongoose from "mongoose"
-import taskroutes from "./src/routes/taskroutes.js"
-import express from "express"
+import mongoose from "mongoose";
+import taskroutes from "./src/routes/taskroutes.js";
+import express from "express";
 
 // DB connection
 
 const dbConnect = async () => {
-    try {
-        await mongoose.connect(process.env['WHICH_DB'],{})
-        console.log("Connected to db!")
-    } catch(e){
-        console.log("Server crashed!")
-    }
-}
+  try {
+    await mongoose.connect(process.env["WHICH_DB"], {});
+    console.log("Connected to db!");
+  } catch (e) {
+    console.log("Server crashed!");
+  }
+};
 
-await dbConnect()
+await dbConnect();
 
-const app = express()
+const app = express();
 
 // Parsing middleware
-app.use(express.urlencoded({extended: true}));
-app.use(express.json())
+app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
 
-// Routes
-app.use("/",taskroutes)
+// Using taks routes
+app.use("/", taskroutes);
 
-app.all("*", (req,res) => {
-    res.status(404).send("Oops! Resource not found.")
-})
+app.all("*", (req, res) => {
+  res.status(404).send("Oops! Resource not found.");
+});
 
-
-app.listen(process.env['PORT'],() => {
-    console.log(`Listening on ${process.env['PORT']}`)
-})
+// Set network port that the container will listen on
+app.listen(process.env["PORT"], () => {
+  console.log(`Listening on ${process.env["PORT"]}`);
+});
