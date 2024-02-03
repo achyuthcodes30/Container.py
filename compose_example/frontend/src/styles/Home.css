@@ -2,25 +2,160 @@
   width: 100vw;
   height: 100vh;
   display: flex;
-  justify-content: center;
+  align-items: center;
   flex-direction: column;
 }
 .title {
-  font-family: "Lucida Sans", "Lucida Sans Regular", sans-serif;
-  font-size: 3.5rem;
+  font-family: "Playfair Display";
+  font-size: 4rem;
   font-weight: 800;
-  color: white;
+  color: rgb(186, 117, 207);
   overflow: hidden;
-  margin: 0.5rem auto;
+  margin: 1rem auto 3rem auto;
 }
 
 .box {
-  background-color: rgb(168, 233, 246, 0.2);
-  height: 80%;
-  width: 80%;
-  border-radius: 2%;
+  width: 70%;
+  height: 70%;
+  margin: 2rem auto;
+}
+
+.selectform {
+  border-radius: 7%;
+  width: 8rem;
+  height: 100%;
+}
+
+.select {
+  color: rgb(107, 8, 125);
+  border: none;
+  border-radius: 7%;
+  padding: 1%;
+  font-size: 1.25rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: "Playfair Display";
+  width: 8rem;
+  height: 100%;
+  cursor: pointer;
+}
+
+.new-button-text {
+  background: radial-gradient(
+    at left top,
+    rgb(161, 232, 155),
+    rgb(64, 176, 111)
+  );
+  width: 8rem;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 5%;
+  margin-top: 0;
+  border: none;
+  font-family: "Playfair Display";
+  font-weight: 500;
+  font-size: 1.1rem;
+  color: rgb(9, 21, 7);
+}
+
+.menu {
+  width: 100%;
+  height: 3rem;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.tasks {
+  width: 100%;
+  height: 100%;
+  margin-top: 1rem;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding: 3rem;
+  display: flex;
+  flex-direction: column;
+}
+.task {
+  width: 90%;
+  height: 10%;
+  background-color: white;
   margin: 1rem auto;
-  box-shadow:
-    rgba(43, 63, 135, 0.25) 0px 50px 100px -20px,
-    rgba(1, 33, 49, 0.3) 0px 30px 60px -30px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.tasktitle {
+  font-family: "Playfair Display";
+  font-weight: 600;
+  font-size: 1.1rem;
+  margin-left: 2%;
+}
+
+.task-due-span {
+  display: flex;
+  flex-direction: column;
+  justify-content: end;
+  justify-content: center;
+  width: 20%;
+}
+
+.completed-span {
+  display: flex;
+  width: 30%;
+  height: 100%;
+  justify-content: center;
+  align-items: center;
+}
+
+.taskcomplete {
+  color: gray;
+  font-family: "Playfair Display";
+  font-weight: 400;
+  font-size: 1rem;
+}
+
+.taskdue {
+  color: gray;
+  font-family: "Playfair Display";
+  font-weight: 400;
+  font-size: 1rem;
+}
+
+.taskcomplete:hover {
+  text-decoration: underline gray;
+  cursor: pointer;
+}
+
+.details-span {
+  width: 60%;
+  height: 100%;
+  display: flex;
+  justify-content: end;
+}
+
+.task-title-span {
+  height: 100%;
+  width: 40%;
+  display: flex;
+  justify-content: start;
+  align-items: center;
+}
+
+.delete {
+  display: flex;
+  justify-content: end;
+  align-items: center;
+  height: 100%;
+  width: 5%;
+}
+
+.delete > h1 {
+  color: gray;
+  font-size: 2rem;
+  cursor: pointer;
 }

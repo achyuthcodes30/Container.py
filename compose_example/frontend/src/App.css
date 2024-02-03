@@ -1,7 +1,14 @@
 * {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
   overflow: hidden;
 }
 
 body {
-  background: radial-gradient(at left top, #3775d1, #49bbde);
+  background: radial-gradient(
+    at right top,
+    rgb(244, 241, 242),
+    rgb(160, 139, 177)
+  );
 }

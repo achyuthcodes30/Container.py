@@ -1,24 +1,44 @@
 version: "3.9"
 
 services:
- mongodb:
-  container_name: mongo_container
-  image: mongo:6
-  restart: always
-  volumes:
-   - mongodb_data:/data/db
+  mongodb:
+    container_name: mongo_container
+    image: mongo:6
+    restart: always
+    healthcheck:
+      test: ["CMD", "mongosh", "--eval", "db.runCommand({ ping: 1 })"]
+      interval: 10s
+      timeout: 10s
+      retries: 5
+    volumes:
+      - mongodb_data:/data/db
 
- backend:
-  container_name: node_container
-  build: ./backend
-  ports:
-   - 4000:3000
-  environment:
-   PORT: 3000
-   WHICH_DB: mongodb://mongodb:27017/composexample
-  depends_on:
-   - mongodb
-  
+  backend:
+    container_name: node_container
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    ports:
+      - 4000:3000
+    environment:
+      PORT: 3000
+      WHICH_DB: mongodb://mongodb:27017/composexample
+    depends_on:
+      mongodb:
+        condition: service_healthy
+
+  frontend:
+    container_name: react_container
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    ports:
+      - 5000:8080
+    environment:
+      VITE_WHICH_API: node_container
+      PORT: 8080
+    depends_on:
+      - backend
 
 volumes:
- mongodb_data: {}
+  mongodb_data: {}
