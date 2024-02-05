@@ -7,8 +7,8 @@
 
 body {
   background: radial-gradient(
-    at right top,
-    rgb(244, 241, 242),
-    rgb(160, 139, 177)
+    at right bottom,
+    rgb(75, 115, 226),
+    rgb(194, 156, 216)
   );
 }

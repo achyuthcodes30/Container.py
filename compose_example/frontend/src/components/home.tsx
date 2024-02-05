@@ -30,21 +30,21 @@ function Home() {
       if (option == "pending") {
         console.log(option);
         const response = await axios.get(`/pending`, {
-          baseURL: `http://localhost:4000`,
+          baseURL: `/backend`,
         });
         setPendingTasks(response.data);
         console.log(pendingTasks);
       } else if (option == "all") {
         console.log(option);
         const response = await axios.get(`/`, {
-          baseURL: `http://localhost:4000`,
+          baseURL: `/backend`,
         });
         setAllTasks(response.data);
         console.log(allTasks);
       } else {
         console.log(option);
         const response = await axios.get(`/completed`, {
-          baseURL: `http://localhost:4000`,
+          baseURL: `/backend`,
         });
         setCompletedTasks(response.data);
         console.log(completedTasks);
@@ -59,12 +59,6 @@ function Home() {
     setSelectedOption(e.target.value);
   };
 
-  function formatTime(hours: number, minutes: number, seconds: number) {
-    const pad = (value: number) => (value < 10 ? `0${value}` : value);
-
-    return `${pad(hours)}:${pad(minutes)}:${pad(seconds)}`;
-  }
-
   function updateTime(deadline: Date) {
     const currentTime = new Date();
     if (!deadline) {
@@ -77,20 +71,22 @@ function Home() {
       return "Overdue";
     }
 
-    const hours = Math.floor(timeDifference / (1000 * 60 * 60));
+    const days = Math.floor(timeDifference / (1000 * 60 * 60 * 24));
+    const hours = Math.floor(
+      (timeDifference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)
+    );
     const minutes = Math.floor(
       (timeDifference % (1000 * 60 * 60)) / (1000 * 60)
     );
-    const seconds = Math.floor((timeDifference % (1000 * 60)) / 1000);
 
-    const formattedTime = formatTime(hours, minutes, seconds);
+    const formattedTime = `${days}d ${hours}h ${minutes}m`;
 
-    return formattedTime + " " + "hrs";
+    return formattedTime;
   }
 
   const completeTask = async (id: string) => {
     try {
-      await axios.put(`http://localhost:4000/${id}`);
+      await axios.put(`/backend/${id}`);
       setCompleteTrigger(true);
     } catch (e) {
       console.error("Error", e);
@@ -99,7 +95,7 @@ function Home() {
 
   const deleteTask = async (id: string) => {
     try {
-      await axios.delete(`http://localhost:4000/${id}/delete`);
+      await axios.delete(`/backend/${id}/delete`);
       setDeleteTrigger(true);
     } catch (e) {
       console.error("Error", e);
@@ -277,6 +273,27 @@ function Home() {
                   </span>
                 </span>
               ))}
+
+            <span className="task">
+              <span className="task-title-span">
+                <h1 className="tasktitle">Buy Groceries for the house</h1>
+              </span>
+              <span className="details-span">
+                <span className="completed-span">
+                  <h1 className="taskcomplete">Mark as completed</h1>
+                </span>
+
+                <span className="task-due-span">
+                  <h1 className="taskdue">Due in:</h1>
+                  <h1 className="taskdue">
+                    {updateTime(new Date("2024-02-09T15:30:30Z"))}
+                  </h1>
+                </span>
+                <span className="delete">
+                  <h1>&#128465;</h1>
+                </span>
+              </span>
+            </span>
           </div>
         </div>
       </div>
