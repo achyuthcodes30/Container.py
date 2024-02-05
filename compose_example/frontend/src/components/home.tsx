@@ -273,27 +273,6 @@ function Home() {
                   </span>
                 </span>
               ))}
-
-            <span className="task">
-              <span className="task-title-span">
-                <h1 className="tasktitle">Buy Groceries for the house</h1>
-              </span>
-              <span className="details-span">
-                <span className="completed-span">
-                  <h1 className="taskcomplete">Mark as completed</h1>
-                </span>
-
-                <span className="task-due-span">
-                  <h1 className="taskdue">Due in:</h1>
-                  <h1 className="taskdue">
-                    {updateTime(new Date("2024-02-09T15:30:30Z"))}
-                  </h1>
-                </span>
-                <span className="delete">
-                  <h1>&#128465;</h1>
-                </span>
-              </span>
-            </span>
           </div>
         </div>
       </div>
