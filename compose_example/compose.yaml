@@ -18,8 +18,6 @@ services:
     build:
       context: ./backend
       dockerfile: Dockerfile
-    ports:
-      - 4000:3000
     environment:
       PORT: 3000
       WHICH_DB: mongodb://mongodb:27017/composexample
@@ -32,11 +30,8 @@ services:
     build:
       context: ./frontend
       dockerfile: Dockerfile
-    ports:
-      - 5000:8080
     environment:
-      VITE_WHICH_API: node_container
-      PORT: 8080
+      VITE_PORT: 8080
     depends_on:
       - backend
 

@@ -318,6 +318,11 @@ services:
     container_name: mongo_container
     image: mongo:6
     restart: always
+    healthcheck:
+      test: ["CMD", "mongosh", "--eval", "db.runCommand({ ping: 1 })"]
+      interval: 10s
+      timeout: 10s
+      retries: 5
     volumes:
       - mongodb_data:/data/db
 
@@ -327,28 +332,37 @@ services:
       context: ./backend
       dockerfile: Dockerfile
     ports:
-      - 4000:3000
     environment:
       PORT: 3000
       WHICH_DB: mongodb://mongodb:27017/composexample
     depends_on:
-      - mongodb
+      mongodb:
+        condition: service_healthy
 
   frontend:
     container_name: react_container
     build:
       context: ./frontend
       dockerfile: Dockerfile
-    ports:
-      - 5000:3000
     environment:
-      WHICH_API: backend
+      VITE_PORT: 8080
     depends_on:
+      - backend
+
+  nginx:
+    container_name: nginx_container
+    build:
+      context: ./nginx
+      dockerfile: Dockerfile
+    ports:
+      - 8000:80
+    restart: always
+    depends_on:
+      - frontend
       - backend
 
 volumes:
   mongodb_data: {}
-
 
 ```
 
@@ -358,11 +372,15 @@ This is what we find. Let us try unwrap what each line does here:
 
 - `services`: A Compose file must declare a services top-level element as a map whose keys are string representations of service names, and whose values are service definitions. A service definition contains the configuration that is applied to each service container. In our case, we define service names `mongodb`,`backend` and `frontend` and provide configurations and build contexts for some of them too.
 
-- `mongodb`: We define the database service name as "mongodb" and give it a container name, define the base image it should use and ask Docker Compose to always restart this service when we run `docker compose restart`. We also ask Docker to create a volume for us and map a location with the db data directory inside of the container. Volumes are used for persistent storage of data so that even if a container has to be stopped or deleted, data is persisted across such events and we can spin up new containers with this data.
+- `mongodb`: We define the database service name as "mongodb" and give it a container name, define the base image it should use and ask Docker Compose to always restart this service when we run `docker compose restart`. We also ask Docker to create a volume for us and map a location with the db data directory inside of the container. Volumes are used for persistent storage of data so that even if a container has to be stopped or deleted, data is persisted across such events and we can spin up new containers with this data. We also define a simple healthcheck by pinging the DB service inside the container as we want it to be up and running before our Node container can attempt to connect to it.
 
--`backend`: For the backend service we first pass in a name for the container and the path to the build context or the Dockerfile, which is written in a similar fashion as the basic Node + Express server we dockerised earlier. We then map port 4000 on the host machine to port 3000 of the container. We also need to pass in environment variables for which port the container should run on and the database URI, where we specify the service/container name and the port of the container that listens to DB connections (27107). The `depends_on` option specifies the dependencies between services and defines the order in which these containers should start and stop. We want the DB service to start up before starting the backend service and attempting to establish a connection.
+-`backend`: For the backend service we first pass in a name for the container and the path to the build context or the Dockerfile, which is written in a similar fashion as the basic Node + Express server we dockerised earlier. We also need to pass in environment variables for which port the container should run on and the database URI, where we specify the service/container name and the port of the container that listens to DB connections (27107). The `depends_on` option specifies the dependencies between services and defines the order in which these containers should start and stop. We want the DB container and the service inside of it to be up before starting the backend service and attempting to establish a connection.
 
-- `frontend`: Similar to the backend service. We map port 5000 of our host machine to port 3000 of the container on which our React application runs. We also pass in the backend service name to an environment variable `WHICH_API` to make requests to it and fetch data for our frontend.
+- `frontend`: Similar to the backend service. We pass in environment variable `VITE_PORT` to define which port we wnat our React app to run on inside the container.
+
+- `nginx` : We have set up a container called `nginx_container` to use `NGINX` as a reverse proxy. The nginx service runs on port 80 inside the container and is mapped to the host port 8000. This service proxies requests to our React App on port 8080 of the `react_container` that runs on the browser and can send HTTP requests to our backend service from there. The `nginx` service proxies backend HTTP requests to our node_container's port 3000 and so the browser does not have to worry about resolving the IP address of that container. Docker compose assigns all these containers a common network and handles that.
+
+![Design](https://i.ibb.co/5s9rF8n/image.png)
 
 Now let's run this application. Run `docker compose build` inside the `compose_example` directory. This will look for services defined in the `compose.yaml` file and run a build for each context and Dockerfile referenced there.
 
