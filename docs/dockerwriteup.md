@@ -1,6 +1,6 @@
 ---
 title: Docker Undocked
-date: "2024-02-08"
+date: "2024-02-09"
 tags: [docker, dockercompose, dockerinternals]
 description: " An in depth article explaining how Docker works and to help you start dockerising your applications "
 permalink: posts/{{ title | slug }}/index.html
@@ -42,7 +42,7 @@ Install Docker on your local machine:
 **A note for Windows users:** To run Linux Docker containers on a Windows 10 or 11 64-bit Home version, you will need to install and setup wsl version 2 with your preferred Linux distribution of choice. Before doing this make sure you have enable the `Windows Subsystem For Linux` and `Virtual Machine Platform` in the Windows Features Control Panel. Also make sure virtualization is enabled by checking your Task Manager. Once this is done, run `wsl --install` on your powershell and after successful installation of the default Ubuntu subsystem, proceed to install Docker Desktop on your host.
 
 Also, all the code for this workshop can be found in this repo:
-https://github.com/achyuthcodes30/Docker-Undocked-Code
+[https://github.com/achyuthcodes30/Docker-Undocked-Code](https://github.com/achyuthcodes30/Docker-Undocked-Code)
 
 Before delving into Docker, let's explore some of the related technologies and foundational concepts that set the stage for containerization and Docker's inception and growth.
 
@@ -277,7 +277,16 @@ All or most instructions in a Dockerfile create a layer in the build process of 
 
 To exploit this feature and optimize our build, we can rewrite our Dockerfile like this:
 
-![Optimized Dockerfile](https://i.ibb.co/G9WNYyg/Screenshot-204.png)
+```
+FROM node:21-alpine3.19
+WORKDIR /app
+COPY package*.json /app
+RUN npm install
+COPY . /app
+EXPOSE 3000
+CMD ["node","index.js"]
+
+```
 
 This ensures that we do not unnecessarily reinstall packages each time we build the image making the build process quicker and more efficient. We also specifiy a tag/version for our node environment instead of the "latest" tag to ensure that our app remains stable regardless of any updates to the base image. We also run `npm ci` instead of `npm install` for a clean installation of the exact versions of dependencies in the `package-lock.json` file.
 
