@@ -1,10 +1,10 @@
 ---
-title: Docker Demystified
+title: Docker Undocked
 date: "2024-02-08"
-tags: [docker, beginner]
-description: " An easy to follow article to help you start dockerising your applications "
+tags: [docker, dockercompose, dockerinternals]
+description: " An in depth article explaining how Docker works and to help you start dockerising your applications "
 permalink: posts/{{ title | slug }}/index.html
-author_name: Achyuth Yogesh Sosale,
+author_name: Achyuth Yogesh Sosale
 author_link: "https://github.com/achyuthcodes30"
 ---
 
@@ -12,13 +12,26 @@ author_link: "https://github.com/achyuthcodes30"
 
 Ever faced issues while running or managing multiple versions of software, or with your code failing on another machine? What if there was a way to package up your code to ensure it runs smoothly in any environment, allowing you to ship it across any platform? Well, Docker is here to make your life easier 🐋.
 
-In this workshop we will be trying to understand what Docker is and how it works before we dive right into a few examples and get our hands dirty to familiarise ourselves with its fundamentals.
+This article is associated with the `Docker Undocked` workshop, through which we will be trying to understand what Docker is and how it works before we dive right into a few examples and get our hands dirty to familiarise ourselves with its fundamentals.
+
+## Table of Contents
+
+- [Preqrequisites](#prerequisites)
+- [Virtualisation and the Cloud](#virtualisation-and-the-cloud)
+- [Getting our hands dirty](#getting-our-hands-dirty)
+- [Containerization and Docker](#containerization-and-docker)
+- [Docker images vs containers](#docker-images-vs-containers)
+- [Can we create our own Docker images?](#can-we-create-our-own-images)
+- [Docker Cheatsheet 🤩](#some-more-docker-commands)
+- [Docker Compose and Multicontainer applications](#docker-compose-and-multicontainer-applications)
+- [Docker internals](#docker-internals)
+- [Next steps and resources](#next-steps-and-resources)
 
 ## Prerequisites
 
 Before we start do make sure that you are done with either one of the following steps:
 
-Create an account on [Docker Hub](https://hub.docker.com) to follow along with this workshop on the [Docker Playground](https://labs.play-with-docker.com/) or,
+Create an account on [Docker Hub](https://hub.docker.com) to follow along with the workshop on the [Docker Playground](https://labs.play-with-docker.com/) or,
 
 Install Docker on your local machine:
 
@@ -29,7 +42,7 @@ Install Docker on your local machine:
 **A note for Windows users:** To run Linux Docker containers on a Windows 10 or 11 64-bit Home version, you will need to install and setup wsl version 2 with your preferred Linux distribution of choice. Before doing this make sure you have enable the `Windows Subsystem For Linux` and `Virtual Machine Platform` in the Windows Features Control Panel. Also make sure virtualization is enabled by checking your Task Manager. Once this is done, run `wsl --install` on your powershell and after successful installation of the default Ubuntu subsystem, proceed to install Docker Desktop on your host.
 
 Also, all the code for this workshop can be found in this repo:
-https://github.com/achyuthcodes30/Docker-Demystified-Code
+https://github.com/achyuthcodes30/Docker-Undocked-Code
 
 Before delving into Docker, let's explore some of the related technologies and foundational concepts that set the stage for containerization and Docker's inception and growth.
 
@@ -63,7 +76,7 @@ A `Type-1 hypervisor` or `Bare-Metal hypervisor` directly interacts with the und
 
 A `Type-2 hypervisor` or `Hosted hypervisor` is generally less performant as the hypervisor relies on a host operating system layer. When an application or the guest OS in the VM issues a system call or requests access to a physical resource, the hypervisor intercepts these requests. The hypervisor communicates with the host OS to manage the sharing and allocation of physical resources among VMs. These are commonly used for development, testing, and desktop virtualization scenarios where optimal performance is not a primary concern. Examples include Oracle VirtualBox and VMWare Workstation.
 
-Let us go ahead and try out a VM for ourselves. Visit the [Docker Playground](https://labs.play-with-docker.com/), login and click on the `Start` option. Once your session is ready add a new instance and you will have your very own Alpine Linux Virtual Machine to play around with (it also has a Docker set up).
+Let us go ahead and try out a VM for ourselves. Visit the [Docker Playground](https://labs.play-with-docker.com/), login and click on the `Start` option. Once your session is ready add a new instance and you will have your very own Linux Virtual Machine to play around with (it also has a Docker set up).
 
 ![Virtualisation Architecture](https://i.ibb.co/CKKtG7w/image.png)
 
@@ -93,17 +106,17 @@ Let us explore the Docker Hub Registry and pull our first Docker image. We will 
 
 - We can verify that the image was build successfully by using the `docker images` command to list all the Docker images on our local respository.
 
-- Next, we spin up a container from this Ubuntu image by running `docker run -it --name ubuntu_container ubuntu`. The -it flags combine the "interactive" and "pesudo-tty" options to provide us with an interactive terminal emulation within the container which will then allow us to interact with its processes.
+- Next, we spin up a container from this Ubuntu image by running `docker run -it --name ubuntu_container ubuntu`. The -it flags combine the "interactive" and "pseudo-tty" options to provide us with an interactive terminal emulation within the container which will then allow us to interact with its processes.
 
 - That was simple wasn't it? We were able to set up an Ubuntu environment on our host machine in just a couple of minutes.
 
-- Now, exit the container and run `docker stop <container_id_or_container_name>` to stop the container and `docker start` to start it again. Note that in the case of no-name containers, providing just the first few unique characters of the container ID will suffice.
+- Now, exit the container using `Ctrl + c` or `Ctrl + p Ctrl + q` and run `docker stop <container_id_or_container_name>` to stop the container and `docker start` to start it again. Note that in the case of no-name containers, providing just the first few unique characters of the container ID will suffice.
 
-- Run the `docker ps -a` command to list all containers on your machine regardless of their state.
+- Run the `docker ps -a` command to list all containers on your machine regardless of their state. The `docker ps` command by itself returns information of only those containers that are alive/running.
 
 - We can now easily spin up multiple containers from the Ubuntu image using the `docker run` command.
 
-- We can also use the `docker exec <container_name_or_id>` command to run a new command inside the specified container.
+- We can also use the `docker exec <container_name_or_id>` command to run a new command inside the specified running container.
 
 - We can also just run `docker run` without running `docker pull` and Docker will pull the image from the registry service as it will not be able to find the image on the local respository.
 
@@ -118,7 +131,11 @@ You can actually see container processes running on your machine with the `ps` c
 
 ![VM vs Container](https://i.ibb.co/fDHnfyC/image.png)
 
-So what is Docker and how is it related to any of this?
+Now, type in the following commands in the docker playground VM - `apk add neofetch` followed by `neofetch`.
+
+We see that we are running an Alpine Linux instance (as you might have inferred from the `apk` package manager). However, when you check `pstree` you can see that it was inited by `dockerd`, which is the Docker daemon and `containerd`, a high level container runtime. This means we are inside an Alpine Linux Docker container in a VM! A lot of virtualization indeed and this is slowly becoming the norm.
+
+But what is Docker and how is it related to any of this?
 
 Docker is a popular open-source container platform consisting of a set of tools designed to simplify the development, deployment, and operation of applications using containers.
 
@@ -252,7 +269,7 @@ app.get("/third", (req, res) => {
 });
 ```
 
-Now, check the result on `localhost:<host_port>`. You will notice that there is no change and we get the 404 message when we try to view `localhost:3000/third`. This is because Docker images are read-only and once built they are locked in and their contents cannot be changed.
+Now, check the result on `localhost:<host_port>`. You will notice that there is no change and we get the 404 message when we try to view `localhost:3000/third`. This is because Docker images are read-only as you read earlier and once built they are locked in and their contents cannot be changed.
 
 So to view these changes, build the image again using the same command as before with a new name. We can see that the image is being built with the exact same steps as before and `npm install` runs again to install packages even though we did not install any new packages. This is unnecessary and inefficient.
 
@@ -260,15 +277,7 @@ All or most instructions in a Dockerfile create a layer in the build process of 
 
 To exploit this feature and optimize our build, we can rewrite our Dockerfile like this:
 
-```
-FROM node:21-alpine3.19
-WORKDIR /app
-COPY package*.json /app
-RUN npm ci
-COPY . /app
-CMD ["node","index.js"]
-EXPOSE 3000
-```
+![Optimized Dockerfile](https://i.ibb.co/G9WNYyg/Screenshot-204.png)
 
 This ensures that we do not unnecessarily reinstall packages each time we build the image making the build process quicker and more efficient. We also specifiy a tag/version for our node environment instead of the "latest" tag to ensure that our app remains stable regardless of any updates to the base image. We also run `npm ci` instead of `npm install` for a clean installation of the exact versions of dependencies in the `package-lock.json` file.
 
@@ -304,9 +313,9 @@ YAML Ain't Markup Language (YAML) is a data serialization language that can be e
 
 JSON represents structured data in Javascript Object syntax that can easily be read by us. Even though it closely resembles JavaScript object literal syntax, it can be used independently from JavaScript, and many programming environments feature the ability to read (parse) and generate JSON. While we most certainly can work with a simple format such as JSON, it needs to be serialized into a JSON string so it can be transmitted over a network or stored in files. To do this, we use `JSON.stringify()` and then we deserialize the JSON string with `JSON.parse()` to reconstruct the Javascript Object defined by the string.
 
-Coming back to YAML, it is often used to write configuration files such as our Docker Compose file in the DevOps world, but its object serialization abilities and support for multiple programming environments make it a viable replacement for JSON as it can be considered a superset and is easier to read. While we won't be diving any deeper into YAML in this workshop, here is a good read to familiarise yourself more with its specs and syntax - https://www.cloudbees.com/blog/yaml-tutorial-everything-you-need-get-started
+Coming back to YAML, it is often used to write configuration files such as our Docker Compose file in the DevOps world, but its object serialization abilities and support for multiple programming environments make it a viable replacement for JSON as it can be considered a superset and is easier to read. While we won't be diving any deeper into YAML in this article, here is a good read to familiarise yourself more with its specs and syntax - https://www.cloudbees.com/blog/yaml-tutorial-everything-you-need-get-started
 
-Let's see how we can build multicontainer applications with Docker Compose. To start with, go ahead and clone this repo where with the `git clone` command: https://github.com/achyuthcodes30/Docker-Demystified-Code.
+Let's see how we can build multicontainer applications with Docker Compose. To start with, go ahead and clone this repo where with the `git clone` command: https://github.com/achyuthcodes30/Docker-Undocked-Code.
 
 Then, move to the `compose_example` directory and open the `compose.yaml` Docker Compose file in your preferred editor of choice.
 
@@ -386,7 +395,7 @@ Now let's run this application. Run `docker compose build` inside the `compose_e
 
 Verify that the image was built successfully with the `docker images` command. Then run `docker compose up` in the `compose_example directory`. This will create the required containers and start them in attached mode.
 
-You can now view the site by visiting `localhost:5000` on your browser. If you are on the Docker Playground, expose port 5000 with the `OPEN PORT` option and follow the link generated to view the site.
+You can now view the site by visiting `localhost:8000` on your browser. If you are on the Docker Playground, expose port 8000 with the `OPEN PORT` option and follow the link generated to view the site.
 
 ## Docker Internals
 
