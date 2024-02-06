@@ -129,6 +129,13 @@ In a traditional Infrastructure as a Service (IaaS) model, applications are depl
 Containers are essentially processes running on the Linux Kernel that are isolated with the help of Linux namespaces provide isolated namespaces for processes, networking, filesystem, and other resources. and Cgroups for resource management, allowing limits to be set on CPU, memory, and other resource usage for each container.
 You can actually see container processes running on your machine with the `ps` command or the `pstree` command as opposed to processess running on a guest OS inside a Virtual Machine which are completely isolated.
 
+In the words of Jérôme Petazzoni,
+
+"Containers are processes,
+born from tarballs,
+anchored to namespaces,
+controlled by cgroups."
+
 ![VM vs Container](https://i.ibb.co/fDHnfyC/image.png)
 
 Now, type in the following commands in the docker playground VM - `apk add neofetch` followed by `neofetch`.
@@ -324,7 +331,7 @@ JSON represents structured data in Javascript Object syntax that can easily be r
 
 Coming back to YAML, it is often used to write configuration files such as our Docker Compose file in the DevOps world, but its object serialization abilities and support for multiple programming environments make it a viable replacement for JSON as it can be considered a superset and is easier to read. While we won't be diving any deeper into YAML in this article, here is a good read to familiarise yourself more with its specs and syntax - https://www.cloudbees.com/blog/yaml-tutorial-everything-you-need-get-started
 
-Let's see how we can build multicontainer applications with Docker Compose. To start with, go ahead and clone this repo where with the `git clone` command: https://github.com/achyuthcodes30/Docker-Undocked-Code.
+Let's see how we can build multicontainer applications with Docker Compose. To start with, go ahead and clone this repo where with the `git clone` command: [https://github.com/achyuthcodes30/Docker-Undocked-Code](https://github.com/achyuthcodes30/Docker-Undocked-Code).
 
 Then, move to the `compose_example` directory and open the `compose.yaml` Docker Compose file in your preferred editor of choice.
 
@@ -408,8 +415,22 @@ You can now view the site by visiting `localhost:8000` on your browser. If you a
 
 ## Docker Internals
 
+**Note:** This section is being covered in detail with better illustrations in the workshop.
+
 The Docker platform provides us with a Docker engine or environment consisting of several tools like the Docker CLI, Docker API and Docker Compose and it also consists of a background process called the Docker daemon.
 
 The Docker daemon is responsible for pulling and building images as well as creating and managing containers, volumes and networks. It listens to Docker API requests and performs the necessary actions. For example, when we run the `docker pull`command, the docker daemon is responsible for pulling and building the image if it is not available locally, either from a public repository like Docker Hub or a private repository.
 
 ## Next Steps and Resources
+
+- If you haven't already, go ahead and set up Docker on your host machine to enhance your developer experience. You can follow the instructions provided in the [beginning](#prerequisites) of this article.
+
+- Explore the internals of Docker containers further with this excellent resource: [Jérôme Petazzoni at DockerCon EU 2015](https://youtu.be/sK5i-N34im8?si=M9bVlAylJ6Y8kTLY)
+
+- To put your understanding on Linux container internals to the test check out the `Container from scratch` code here - [https://github.com/achyuthcodes30/Docker-Undocked-Code](https://github.com/achyuthcodes30/Docker-Undocked-Code). Start by figuring out the crux of what's going on here and figure out the best way to `chroot` and to assign it to `cgroups` and contribute!!
+
+- Explore container services on cloud platforms like AWS (ECS and EKS), Microsoft Azure and Google Cloud Platform. Try to push your images to the Docker Hub Public Registry and try to deploy your containerised applications using the cloud services mentioned above.
+
+- Now that you have a good understanding of Docker and its internals, explore a container orchestration platform like `Kubernetes` and other containerization tools like `Containerd` and `Podman`.
+
+- Keep learning, exploring and growing! 😀
