@@ -1,0 +1,92 @@
+.layout {
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+}
+.new-task {
+  font-family: "Playfair Display";
+  font-size: 4rem;
+  font-weight: 800;
+  background-image: radial-gradient(
+    at left top,
+    rgb(122, 23, 228),
+    rgb(217, 64, 133)
+  );
+  color: transparent;
+  background-clip: text;
+  overflow: hidden;
+  margin: 2.5rem auto 2.5rem auto;
+}
+
+.task-box {
+  width: 70%;
+  height: 70%;
+  margin: 1.25rem auto;
+  display: flex;
+  justify-content: center;
+}
+
+.form {
+  width: 100%;
+  height: 100%;
+  overflow-y: hidden;
+  overflow-x: hidden;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: auto;
+}
+
+.entry {
+  width: 100%;
+  height: 8rem;
+  display: flex;
+  flex-direction: column;
+  padding: auto 2rem;
+  margin: 1rem auto;
+}
+
+.entry-title {
+  font-family: "Playfair Display";
+  font-weight: 400;
+  font-size: 1.25rem;
+  color: white;
+  margin: 1% 5.5%;
+}
+
+.input {
+  width: 90%;
+  height: 10%;
+  font-family: "Playfair Display";
+  font-weight: 200;
+  font-size: 1.1rem;
+  padding: 1.5rem;
+  margin: auto;
+}
+
+.submit-div {
+  width: 100%;
+  height: 4rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 2rem auto;
+}
+
+.submit {
+  background: radial-gradient(at left top, rgb(230, 57, 109), rgb(39, 77, 231));
+  width: 8rem;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 5%;
+  margin-top: 0;
+  border: none;
+  font-family: "Playfair Display";
+  font-weight: 500;
+  font-size: 1.1rem;
+  color: white;
+}

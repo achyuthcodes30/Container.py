@@ -4,6 +4,7 @@ import AOS from "aos";
 import "aos/dist/aos.css";
 import axios from "axios";
 import { useAutoAnimate } from "@formkit/auto-animate/react";
+import { useNavigate } from "react-router-dom";
 
 interface Task {
   _id: string;
@@ -24,23 +25,24 @@ function Home() {
   const [completeTrigger, setCompleteTrigger] = useState(false);
   const [deleteTrigger, setDeleteTrigger] = useState(false);
   const [animateTasks] = useAutoAnimate<HTMLDivElement>();
+  const navigate = useNavigate();
 
   const fetchData = async (option: string) => {
     try {
       if (option == "pending") {
-        console.log(option);
         const response = await axios.get(`/pending`, {
           baseURL: `/backend`,
         });
         setPendingTasks(response.data);
         console.log(pendingTasks);
+        console.log(response.config.url);
       } else if (option == "all") {
-        console.log(option);
         const response = await axios.get(`/`, {
           baseURL: `/backend`,
         });
         setAllTasks(response.data);
         console.log(allTasks);
+        console.log(response.config.url);
       } else {
         console.log(option);
         const response = await axios.get(`/completed`, {
@@ -148,6 +150,7 @@ function Home() {
               data-aos-easing="ease-sine"
               data-aos-delay="1400"
               className="new-button-text"
+              onClick={() => navigate("/new")}
             >
               New Task
             </button>
