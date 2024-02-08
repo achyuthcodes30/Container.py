@@ -34,6 +34,7 @@
 
 .select {
   color: rgb(158, 7, 185);
+  background-color: white;
   border: none;
   border-radius: 7%;
   padding: 1%;
@@ -83,7 +84,7 @@
 }
 .task {
   width: 90%;
-  height: 10%;
+  height: 15%;
   background: radial-gradient(at left top, rgb(230, 57, 109), rgb(39, 77, 231));
   margin: 1rem auto;
   display: flex;

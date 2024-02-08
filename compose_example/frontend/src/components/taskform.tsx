@@ -33,7 +33,7 @@ function TaskForm() {
       });
       navigate("/");
     } catch (error) {
-      console.error("Error creating task" + error);
+      console.error("Error creating task");
     }
   };
 
@@ -57,7 +57,7 @@ function TaskForm() {
             data-aos="fade-right"
             data-aos-duration="1800"
             data-aos-easing="ease-sine"
-            data-aos-delay="2800"
+            data-aos-delay="1800"
             className="entry"
           >
             <h1 className="entry-title">Title:</h1>
@@ -74,7 +74,7 @@ function TaskForm() {
             data-aos="fade-left"
             data-aos-duration="1800"
             data-aos-easing="ease-sine"
-            data-aos-delay="2800"
+            data-aos-delay="1800"
             className="entry"
           >
             <h1 className="entry-title">Deadline (if any):</h1>
@@ -89,7 +89,7 @@ function TaskForm() {
             data-aos="flip-up"
             data-aos-duration="1800"
             data-aos-easing="ease-sine"
-            data-aos-delay="2800"
+            data-aos-delay="1800"
             className="submit-div"
           >
             <button type="submit" className="submit">

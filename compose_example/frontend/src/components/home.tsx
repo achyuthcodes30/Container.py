@@ -34,26 +34,20 @@ function Home() {
           baseURL: `/backend`,
         });
         setPendingTasks(response.data);
-        console.log(pendingTasks);
-        console.log(response.config.url);
       } else if (option == "all") {
         const response = await axios.get(`/`, {
           baseURL: `/backend`,
         });
         setAllTasks(response.data);
-        console.log(allTasks);
-        console.log(response.config.url);
       } else {
         console.log(option);
         const response = await axios.get(`/completed`, {
           baseURL: `/backend`,
         });
         setCompletedTasks(response.data);
-        console.log(completedTasks);
       }
     } catch (e) {
       console.error("Error fetching data");
-      console.log(e);
     }
   };
 
@@ -91,7 +85,7 @@ function Home() {
       await axios.put(`/backend/${id}`);
       setCompleteTrigger(true);
     } catch (e) {
-      console.error("Error", e);
+      console.error("Error");
     }
   };
 
@@ -100,7 +94,7 @@ function Home() {
       await axios.delete(`/backend/${id}/delete`);
       setDeleteTrigger(true);
     } catch (e) {
-      console.error("Error", e);
+      console.error("Error");
     }
   };
 

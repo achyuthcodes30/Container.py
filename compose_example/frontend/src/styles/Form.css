@@ -58,12 +58,15 @@
 
 .input {
   width: 90%;
-  height: 10%;
+  height: 13%;
   font-family: "Playfair Display";
   font-weight: 200;
   font-size: 1.1rem;
   padding: 1.5rem;
   margin: auto;
+  background-color: white;
+  border: none;
+  color: black;
 }
 
 .submit-div {
