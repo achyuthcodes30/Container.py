@@ -96,7 +96,7 @@
   font-family: "Playfair Display";
   font-weight: 200;
   font-size: 1.1rem;
-  margin-left: 2%;
+  margin-left: 5%;
   color: white;
 }
 
@@ -152,7 +152,7 @@
 
 .delete {
   display: flex;
-  justify-content: end;
+  justify-content: center;
   align-items: center;
   height: 100%;
   width: 7%;
